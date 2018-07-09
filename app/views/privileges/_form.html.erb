@@ -1,0 +1,21 @@
+
+    <%= form_for(@privilege) do |f| %>
+        <div >
+          <label >名称：</label>
+          <div >
+            <%= f.text_field :name%>
+          </div>
+        </div>
+        <div >
+          <label >显示简称：</label>
+          <div >
+            <%= f.text_field :displyname%>
+          </div>
+        </div>
+        <div >
+          <label ></label>
+          <div >
+            <%= f.submit '确定' %>&nbsp;<%= link_to "返回",privileges_path %>
+          </div>
+        </div>
+    <% end %>

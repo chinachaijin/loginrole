@@ -1,0 +1,45 @@
+
+<table>
+  <thead>
+  <tr>
+    <th >控制器</th>
+    <th >权限</th>
+    <th >操作</th>
+  </tr>
+  </thead>
+  <tbody data-turbolinks="false">
+  <% @modularprivileges.each do |mp| %>
+      <%= form_for(mp) do |f| %>
+          <tr>
+            <td>
+              <%= f.select(:modular_id) do %>
+                  <%= content_tag(:option, "  ", value: 0) %>
+                  <% @modulars.each do |u| %>
+                      <%if u.id == mp.modular_id%>
+                          <%= content_tag(:option, u.displyname, value: u.id,selected:"selected") %>
+                      <%else%>
+                          <%= content_tag(:option, u.displyname, value: u.id) %>
+                      <%end%>
+                  <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= f.select(:privilege_id) do %>
+                  <%= content_tag(:option, "  ", value: 0) %>
+                  <% @privileges.each do |u| %>
+                      <%if u.id == mp.privilege_id%>
+                          <%= content_tag(:option, u.displyname, value: u.id,selected:"selected") %>
+                      <%else%>
+                          <%= content_tag(:option, u.displyname, value: u.id) %>
+                      <%end%>
+                  <% end %>
+              <% end %>
+            </td>
+            <td><%= f.submit '保存' %><%= link_to '删除', mp, method: :delete, data: { confirm: '确认删除?' } %></td>
+          </tr>
+      <% end %>
+  <% end %>
+  </tbody>
+</table>
+<%= link_to "新增",new_modularprivilege_path %>
+<%=render 'toolbar' %>

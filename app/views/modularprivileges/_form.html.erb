@@ -1,0 +1,28 @@
+
+<%= form_for(@role) do |f| %>
+    <div >
+      <label >商家名称：</label>
+      <div >
+        <%= f.text_field :name%>
+      </div>
+    </div>
+    <div >
+      <label >商家简称：</label>
+      <div >
+        <%= f.text_field :remark%>
+      </div>
+    </div>
+    <div >
+      <label >商家简称：</label>
+      <div >
+        <%= f.check_box :sttype%>
+      </div>
+    </div>
+
+    <div >
+      <label ></label>
+      <div >
+        <%= f.submit '确定' %>&nbsp;<%= link_to "返回",roles_path %>
+      </div>
+    </div>
+<% end %>

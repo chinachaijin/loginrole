@@ -1,0 +1,123 @@
+
+<%= form_for(@role) do |f| %>
+    <div >
+      <label >角色名：</label>
+      <div >
+        <%= f.text_field :name%>
+      </div>
+    </div>
+    <div >
+      <label >备注：</label>
+      <div >
+        <%= f.text_field :remark%>
+      </div>
+    </div>
+    <div >
+      <label >角色组：</label>
+      <div >
+        <%if @rolearr == 0%>
+            <%= f.number_field(:sttype, in: 0..20) %>
+        <%else%>
+            <%= f.number_field(:sttype , readonly:'true') %>
+        <%end%>
+      </div>
+    </div>
+    <div >
+      <label >角色层级：</label>
+      <div >
+        <%= f.number_field(:up_id, in: (@roleselect)..20) %>
+      </div>
+    </div>
+    <%if @role.id != nil%>
+        <table>
+          <thead>
+          <tr>
+            <th >用户名</th>
+            <th >角色</th>
+            <th >操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @userroles.each do |cont| %>
+              <%= f.fields_for cont, index: cont.id do |cont_form|%>
+                  <tr>
+                    <td>
+                      <% cont_form.select :user_id,options_for_select(@users.map{ |u| [u.nickname, u.id] } ,cont.user_id) %>
+                      <%= cont_form.select(:user_id) do %>
+                          <%= content_tag(:option, "  ", value: 0) %>
+                          <% @users.each do |u| %>
+                              <%if u.id == cont.user_id%>
+                                  <%= content_tag(:option, u.nickname, value: u.id,selected:"selected") %>
+                              <%else%>
+                                  <%= content_tag(:option, u.nickname, value: u.id) %>
+                              <%end%>
+                          <% end %>
+                      <% end %>
+                    </td>
+                    <td><%=cont.role.name%></td>
+                    <td><%= link_to '删除', userrole_path(cont, :type => 2), method: :delete, data: { confirm: '确认删除?' } %></td>
+                  </tr>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+        <div >
+          <label ></label>
+          <div >
+            <%= link_to "新增",new_userrole_path(:rid => @role.id) %>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th >角色</th>
+            <th >模块</th>
+            <th >操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @rolemodulars.each do |cont| %>
+              <%= f.fields_for cont, index: cont.id do |cont_form|%>
+                  <tr>
+                    <td><%=cont.role.name%></td>
+                    <td>
+                      <% cont_form.select :modularprivilege_id,options_for_select(@modularprivileges.map{ |u| [u.name, u.id] } ,cont.modularprivilege_id) %>
+                      <%= cont_form.select(:modularprivilege_id) do %>
+                          <%= content_tag(:option, "  ", value: 0) %>
+                          <% @modularprivileges.each do |u| %>
+                              <%if u.id == cont.modularprivilege_id%>
+                                  <%= content_tag(:option, u.name, value: u.id, selected: "selected" ) %>
+                              <%else%>
+                                  <%= content_tag(:option, u.name, value: u.id) %>
+                              <%end%>
+                          <% end %>
+                      <% end %>
+                    </td>
+                    <td><%= link_to '删除', rolemodular_path(cont), method: :delete, data: { confirm: '确认删除?' } %></td>
+                  </tr>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+        <div >
+          <label ></label>
+          <div >
+            <%= link_to "新增",new_rolemodular_path(:rid => @role.id) %>
+          </div>
+        </div>
+        <div >
+          <label ></label>
+          <div >
+            <%= f.submit '确定' %>&nbsp;<%= link_to "返回",roles_path %>
+          </div>
+        </div>
+    <% else %>
+        <div >
+          <label ></label>
+          <div >
+            <%= f.submit '确定' %>&nbsp;<%= link_to "返回",roles_path %>
+          </div>
+        </div>
+    <% end %>
+<% end %>

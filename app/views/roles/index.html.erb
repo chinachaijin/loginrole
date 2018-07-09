@@ -1,0 +1,31 @@
+<table >
+  <thead>
+    <tr>
+      <th >名称</th>
+      <th >备注</th>
+      <th >角色组</th>
+      <th >角色层</th>
+      <th >操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @roles.each do |role| %>
+      <tr>
+        <td><%= role.name %></td>
+        <td><%= role.remark %></td>
+        <td>
+          <%=role.sttype%>
+        </td>
+        <td>
+          <%=role.up_id%>
+        </td>
+        <td>
+          <%= link_to '编辑',edit_role_path(role) %>
+          <%= link_to '删除', role, method: :delete, data: { confirm: '确认删除?' } %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= link_to "新增",new_role_path%>
+<%=render 'toolbar' %>

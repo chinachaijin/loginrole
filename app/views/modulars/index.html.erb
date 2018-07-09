@@ -1,0 +1,23 @@
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>显示名称</th>
+      <th colspan="2">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @modulars.each do |mod| %>
+      <tr>
+        <td><%= mod.name %></td>
+        <td><%= mod.displyname %></td>
+        <td>
+          <%= link_to '编辑',edit_modular_path(mod) %>
+          <%= link_to '删除', mod, method: :delete, data: { confirm: '确认删除?' } %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= link_to "新增",new_modular_path%>
+<%=render 'toolbar' %>

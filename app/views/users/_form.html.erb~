@@ -1,0 +1,128 @@
+<script>
+    var keycode = "";
+    var lastTime=null,nextTime;
+    var lastCode=null,nextCode;
+    document.onkeydown=function(e){
+        if(window.event){
+            // IE
+            nextCode = e.keyCode
+        } else if(e.which){
+            // Netscape/Firefox/Opera
+            nextCode = e.which
+        }
+        //字母上方 数字键0-9 对应键码值 48-57
+        //数字键盘 数字键0-9 对应键码值 96-105
+        else if((nextCode>=48&&nextCode<=57)  || (nextCode>=96&&nextCode<=105)){
+            //数字键盘的键码值对应的字符有问题，所以手动调整键码值
+            var codes = {'48':48,'49':49,'50':50,'51':51,'52':52,'53':53,'54':54,'55':55,'56':56,'57':57,
+                '96':48,'97':49,'98':50,'99':51,'100':52,'101':53,'102':54,'103':55,'104':56,'105':57
+            };
+            nextCode = codes[nextCode];
+            nextTime = new Date().getTime();
+            if(lastCode == null && lastTime == null) {
+                keycode = String.fromCharCode(nextCode);
+            } else if(lastCode != null && lastTime != null && nextTime - lastTime <= 30) {
+                keycode += String.fromCharCode(nextCode);
+            }  else{
+                keycode = "";
+                lastCode = null;
+                lastTime = null;
+            }
+            lastCode = nextCode;
+            lastTime = nextTime;
+        }
+        //13 为按键Enter
+        else if(nextCode==13 && keycode!= ""){
+            debugger
+
+            keycode = "";
+            lastCode = null;
+            lastTime = null;
+        }
+    }
+
+    function addNewGoodLine(){
+
+    }
+
+    function getProductDetail(){
+        //获取商品的详细信息，然后赋值
+
+    }
+</script>
+<%= form_for(@user) do |f| %>
+    <div >
+      <label >昵称：</label>
+      <div >
+        <%= f.text_field :nickname%>
+      </div>
+    </div>
+    <div >
+      <label >账号：</label>
+      <div >
+        <%= f.text_field :username%>
+      </div>
+    </div>
+    <div >
+      <label >密码：</label>
+      <div >
+        <%= f.password_field :pwd %>
+      </div>
+    </div>
+    <div >
+      <label >再输入一次密码：</label>
+      <div >
+        <%= f.password_field :pwd_conf %>
+      </div>
+    </div>
+    <div >
+      <label >启用：</label>
+      <div >
+        <%= f.check_box :sttype%>
+      </div>
+    </div>
+    <%if @user.id != nil%>
+        <div >
+          <label >密码错误次数：</label>
+          <div >
+            <%= text_field_tag :errus, @user.userpwd.errpwd%>
+          </div>
+        </div>
+        <div >
+          <label >密码错误次数：</label>
+          <div>
+            <%= text_field_tag :nids, @user.userpwd.nids%>
+          </div>
+        </div>
+    <%end%>
+    <div >
+      <label ></label>
+      <div >
+        <%= f.submit '确定' %>&nbsp;<%= link_to "返回",users_path %>
+      </div>
+    </div>
+<% end %>
+<%if @user.id != nil%>
+    <table>
+      <thead>
+      <tr>
+        <th >用户名</th>
+        <th >角色</th>
+        <th colspan="2">操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <%@role = Role.all%>
+      <% @userroles.each do |ur| %>
+          <%= form_for(ur) do |f| %>
+              <tr>
+                <td><%=ur.user.nickname%></td>
+                <td><%= f.select(:role_id,options_for_select(@role.map{ |u| [u.name, u.id] }))%></td>
+                <td><%= f.submit '保存' %><%= link_to '删除', ur, method: :delete, data: { confirm: '确认删除?' } %></td>
+              </tr>
+          <% end %>
+      <% end %>
+      </tbody>
+    </table>
+    <%= link_to "新增",new_userrole_path(:id => @user.id) %>
+<% end %>

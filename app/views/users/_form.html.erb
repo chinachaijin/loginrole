@@ -1,0 +1,101 @@
+
+<%= form_for(@user) do |f| %>
+    <div >
+      <label >昵称：</label>
+      <div >
+        <%= f.text_field :nickname%>
+      </div>
+    </div>
+    <div >
+      <label >账号：</label>
+      <div >
+        <%= f.text_field :username%>
+      </div>
+    </div>
+    <div >
+      <label >密码：</label>
+      <div >
+        <%= f.password_field :pwd %>
+      </div>
+    </div>
+    <div >
+      <label >再输入一次密码：</label>
+      <div >
+        <%= f.password_field :pwd_conf %>
+      </div>
+    </div>
+    <div >
+      <label >启用：</label>
+      <div >
+        <%= f.check_box :sttype%>
+      </div>
+    </div>
+    <div >
+      <label >多重登录：</label>
+      <div >
+        <%= f.check_box :logtype%>
+      </div>
+    </div>
+    <%if @user.id != nil%>
+        <div >
+          <label >密码错误次数：</label>
+          <div >
+            <%= text_field_tag :errus, @user.userpwd.errpwd%>
+          </div>
+        </div>
+        <div >
+          <label >密码错误次数：</label>
+          <div>
+            <%= text_field_tag :nids, @user.userpwd.nids%>
+          </div>
+        </div>
+    <%end%>
+
+    <%if @user.id != nil%>
+        <table>
+          <thead>
+          <tr>
+            <th >用户名</th>
+            <th >角色</th>
+            <th colspan="2">操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @userroles.each do |cont| %>
+              <%= f.fields_for cont, index: cont.id do |cont_form|%>
+                  <tr>
+                    <td><%=cont.user.nickname%></td>
+                    <td>
+                      <% cont_form.select :role_id,options_for_select(@role.map{ |u| [u.name, u.id] } ,cont.role_id) %>
+                      <%= cont_form.select(:role_id) do %>
+                          <%= content_tag(:option, "  ", value: 0) %>
+                          <% @role.each do |u| %>
+                              <%if u.id == cont.role_id%>
+                                  <%= content_tag(:option, u.name, value: u.id,selected:"selected") %>
+                              <%else%>
+                                <%= content_tag(:option, u.name, value: u.id) %>
+                              <%end%>
+                          <% end %>
+                      <% end %>
+                    </td>
+                    <td><%= link_to '删除', userrole_path(cont, :type => 1), method: :delete, data: { confirm: '确认删除?' } %></td>
+                  </tr>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+        <div >
+          <label ></label>
+          <div >
+            <%= f.submit '确定' %>&nbsp;<%= link_to "返回",users_path %> <%= link_to "新增",new_userrole_path(:id => @user.id) %>
+          </div>
+        </div>
+    <% else %>
+        <div >
+          <label ></label>
+          <div >
+            <%= f.submit '确定' %>&nbsp;<%= link_to "返回",users_path %>
+          </div>
+        </div>
+    <% end %>
+<% end %>

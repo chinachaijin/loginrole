@@ -1,0 +1,17 @@
+<div>
+    <%if (request.filtered_parameters[:controller] != "roles") || (request.filtered_parameters[:controller] != "role")%>
+        <%= link_to '角色',roles_path %>
+    <%end%>
+    <%if (request.filtered_parameters[:controller] != "users") || (request.filtered_parameters[:controller] != "user")%>
+        <%= link_to '用户',users_path %>
+    <%end%>
+    <%if (request.filtered_parameters[:controller] != "modularprivileges") || (request.filtered_parameters[:controller] != "modularprivilege")%>
+        <%= link_to '模块权限',modularprivileges_path %>
+    <%end%>
+    <%if (request.filtered_parameters[:controller] != "modulars") || (request.filtered_parameters[:controller] != "modular")%>
+        <%= link_to '模块',modulars_path %>
+    <%end%>
+    <%if (request.filtered_parameters[:controller] != "privileges") || (request.filtered_parameters[:controller] != "privilege")%>
+        <%= link_to '权限',privileges_path %>
+    <%end%>
+</div>
